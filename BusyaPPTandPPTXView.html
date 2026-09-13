@@ -1,0 +1,1166 @@
+<!DOCTYPE html>
+<html lang="ru" data-theme="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Busya PPT/PPTX Reader</title>
+    <style>
+        :root {
+            --md-sys-color-primary: #6200ee;
+            --md-sys-color-on-primary: #ffffff;
+            --md-sys-color-background: #ffffff;
+            --md-sys-color-on-background: #1c1b1f;
+            --md-sys-color-surface: #f3f3f3;
+            --md-sys-color-on-surface: #1c1b1f;
+            --md-sys-color-surface-variant: #e7e0ec;
+            --md-sys-color-on-surface-variant: #49454f;
+            --md-sys-color-outline: #79747e;
+            --md-elevation-1: 0px 1px 3px 1px rgba(0, 0, 0, 0.15), 0px 1px 2px 0px rgba(0, 0, 0, 0.3);
+            --md-elevation-2: 0px 2px 6px 2px rgba(0, 0, 0, 0.15), 0px 1px 2px 0px rgba(0, 0, 0, 0.3);
+            --md-elevation-3: 0px 4px 8px 3px rgba(0, 0, 0, 0.15), 0px 1px 3px 0px rgba(0, 0, 0, 0.3);
+            --md-radius: 12px;
+            --md-transition: 250ms cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        /* Темы */
+        [data-theme="dark"] {
+            --md-sys-color-primary: #d0bcff; --md-sys-color-on-primary: #381e72; --md-sys-color-background: #1c1b1f;
+            --md-sys-color-on-background: #e6e1e5; --md-sys-color-surface: #2b2930; --md-sys-color-on-surface: #e6e1e5;
+            --md-sys-color-surface-variant: #49454f; --md-sys-color-on-surface-variant: #cac4d0; --md-sys-color-outline: #938f99;
+        }
+        [data-theme="blue"] {
+            --md-sys-color-primary: #0a56d9; --md-sys-color-on-primary: #ffffff; --md-sys-color-background: #fdfcff;
+            --md-sys-color-on-background: #1a1c1e; --md-sys-color-surface: #e0e8f6; --md-sys-color-on-surface: #1a1c1e;
+            --md-sys-color-surface-variant: #dfe2eb; --md-sys-color-on-surface-variant: #43474e; --md-sys-color-outline: #73777f;
+        }
+        [data-theme="green"] {
+            --md-sys-color-primary: #196d27; --md-sys-color-on-primary: #ffffff; --md-sys-color-background: #fcfdf6;
+            --md-sys-color-on-background: #1a1c18; --md-sys-color-surface: #dcedd9; --md-sys-color-on-surface: #1a1c18;
+            --md-sys-color-surface-variant: #dee5d8; --md-sys-color-on-surface-variant: #424940; --md-sys-color-outline: #72796f;
+        }
+        [data-theme="red"] {
+            --md-sys-color-primary: #c62828; --md-sys-color-on-primary: #ffffff; --md-sys-color-background: #fffafa;
+            --md-sys-color-on-background: #201a1a; --md-sys-color-surface: #ffdad6; --md-sys-color-on-surface: #201a1a;
+            --md-sys-color-surface-variant: #f4dddd; --md-sys-color-on-surface-variant: #524343; --md-sys-color-outline: #857373;
+        }
+        [data-theme="orange"] {
+            --md-sys-color-primary: #e65100; --md-sys-color-on-primary: #ffffff; --md-sys-color-background: #fffdfb;
+            --md-sys-color-on-background: #201a19; --md-sys-color-surface: #ffdbcc; --md-sys-color-on-surface: #201a19;
+            --md-sys-color-surface-variant: #f4dfd8; --md-sys-color-on-surface-variant: #53433f; --md-sys-color-outline: #85736e;
+        }
+        [data-theme="yellow"] {
+            --md-sys-color-primary: #f9a825; --md-sys-color-on-primary: #312100; --md-sys-color-background: #fffcf4;
+            --md-sys-color-on-background: #1f1b13; --md-sys-color-surface: #ffdea4; --md-sys-color-on-surface: #1f1b13;
+            --md-sys-color-surface-variant: #efe0cf; --md-sys-color-on-surface-variant: #4e4639; --md-sys-color-outline: #807567;
+        }
+        [data-theme="purple"] {
+            --md-sys-color-primary: #6a1b9a; --md-sys-color-on-primary: #ffffff; --md-sys-color-background: #fffbfa;
+            --md-sys-color-on-background: #1e1a22; --md-sys-color-surface: #f0dbff; --md-sys-color-on-surface: #1e1a22;
+            --md-sys-color-surface-variant: #e8dff1; --md-sys-color-on-surface-variant: #4a4552; --md-sys-color-outline: #7c7584;
+        }
+        [data-theme="brown"] {
+            --md-sys-color-primary: #4e342e; --md-sys-color-on-primary: #ffffff; --md-sys-color-background: #fffbff;
+            --md-sys-color-on-background: #1f1a18; --md-sys-color-surface: #eedbc2; --md-sys-color-on-surface: #1f1a18;
+            --md-sys-color-surface-variant: #f2dfe0; --md-sys-color-on-surface-variant: #534341; --md-sys-color-outline: #857371;
+        }
+        [data-theme="pink"] {
+            --md-sys-color-primary: #c2185b; --md-sys-color-on-primary: #ffffff; --md-sys-color-background: #fffbff;
+            --md-sys-color-on-background: #201a1b; --md-sys-color-surface: #ffd9e2; --md-sys-color-on-surface: #201a1b;
+            --md-sys-color-surface-variant: #f3dde1; --md-sys-color-on-surface-variant: #524346; --md-sys-color-outline: #857376;
+        }
+
+        * { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
+        
+        body {
+            font-family: Roboto, system-ui, -apple-system, sans-serif;
+            background-color: var(--md-sys-color-background);
+            color: var(--md-sys-color-on-background);
+            overflow: hidden; display: flex; flex-direction: column; height: 100vh; width: 100vw;
+            transition: background-color var(--md-transition), color var(--md-transition);
+        }
+
+        .icon { fill: currentColor; width: 24px; height: 24px; display: inline-block; }
+
+        .ripple { position: relative; overflow: hidden; }
+        .ripple::after {
+            content: ""; display: block; position: absolute; width: 100%; height: 100%;
+            top: 0; left: 0; pointer-events: none;
+            background-image: radial-gradient(circle, #000 10%, transparent 10.01%);
+            background-repeat: no-repeat; background-position: 50%;
+            transform: scale(10, 10); opacity: 0; transition: transform .5s, opacity 1s;
+        }
+        [data-theme="dark"] .ripple::after { background-image: radial-gradient(circle, #fff 10%, transparent 10.01%); }
+        .ripple:active::after { transform: scale(0, 0); opacity: 0.2; transition: 0s; }
+
+        .btn {
+            display: inline-flex; align-items: center; justify-content: center;
+            gap: 8px; border: none; background: transparent; color: inherit;
+            font-family: inherit; font-size: 14px; font-weight: 500;
+            cursor: pointer; padding: 10px 24px; border-radius: 20px;
+            transition: background-color 0.2s, box-shadow 0.2s;
+        }
+        .btn-filled {
+            background-color: var(--md-sys-color-primary); color: var(--md-sys-color-on-primary);
+            box-shadow: var(--md-elevation-1); border-radius: 100px; padding: 14px 32px; font-size: 16px;
+        }
+        .btn-filled:hover { box-shadow: var(--md-elevation-2); }
+        .btn-filled .ripple::after { background-image: radial-gradient(circle, #fff 10%, transparent 10.01%); }
+        
+        .btn-icon {
+            padding: 8px; border-radius: 50%; min-width: 40px; min-height: 40px;
+            color: var(--md-sys-color-on-surface); border: none; background: transparent;
+            display: flex; align-items: center; justify-content: center; cursor: pointer;
+        }
+        .btn-icon:hover { background-color: rgba(128, 128, 128, 0.1); }
+        .btn-icon.active { background-color: var(--md-sys-color-surface-variant); color: var(--md-sys-color-primary); }
+
+        .screen {
+            position: absolute; top: 0; left: 0; right: 0; bottom: 0;
+            display: flex; flex-direction: column; background-color: var(--md-sys-color-background);
+            transition: opacity var(--md-transition), transform var(--md-transition); z-index: 10;
+        }
+        .screen.hidden { opacity: 0; transform: scale(0.98); pointer-events: none; z-index: -1; }
+
+        .app-bar {
+            display: flex; align-items: center; padding: 8px 16px;
+            background-color: var(--md-sys-color-surface); color: var(--md-sys-color-on-surface);
+            box-shadow: var(--md-elevation-1); z-index: 20; position: relative; gap: 12px;
+            min-height: 64px;
+        }
+        .app-bar-title { flex: 1; font-size: 20px; font-weight: 500; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+        
+        .status-indicators { display: flex; align-items: center; gap: 12px; font-size: 13px; font-weight: 500; opacity: 0.8; }
+        .status-item { display: flex; align-items: center; gap: 4px; }
+        .status-hidden { display: none !important; }
+
+        .toolbar-actions { display: flex; align-items: center; gap: 4px; }
+        .toolbar-group { display: flex; gap: 4px; align-items: center; flex-wrap: wrap;}
+        .divider { width: 1px; height: 24px; background-color: var(--md-sys-color-outline); opacity: 0.3; margin: 0 4px; }
+        
+        #editor-toolbar { display: none; background-color: var(--md-sys-color-surface-variant); }
+        #editor-toolbar.active { display: flex; }
+        #view-toolbar.hidden { display: none; }
+
+        .tool-settings {
+            display: flex; gap: 16px; padding: 8px 24px; background-color: var(--md-sys-color-background);
+            border-bottom: 1px solid var(--md-sys-color-surface-variant); align-items: center; justify-content: center;
+            height: 0; overflow: hidden; opacity: 0; transition: all 0.3s ease;
+        }
+        .tool-settings.active { height: 50px; opacity: 1; overflow: visible; }
+
+        .menu-dropdown {
+            position: absolute; top: 60px; right: 16px; background: var(--md-sys-color-surface);
+            box-shadow: var(--md-elevation-3); border-radius: 8px; padding: 8px 0; display: flex; flex-direction: column;
+            min-width: 200px; transform: scaleY(0); transform-origin: top right; opacity: 0;
+            transition: transform 0.2s, opacity 0.2s; pointer-events: none; z-index: 100;
+        }
+        .menu-dropdown.active { transform: scaleY(1); opacity: 1; pointer-events: auto; }
+        .menu-item { padding: 12px 16px; display: block; cursor: pointer; color: var(--md-sys-color-on-surface); font-size: 14px; }
+        .menu-item:hover { background-color: rgba(128,128,128,0.1); }
+
+        .content-center { flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 24px; }
+
+        .drawer-overlay {
+            position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0,0,0,0.4);
+            z-index: 90; opacity: 0; pointer-events: none; transition: opacity 0.3s;
+        }
+        .drawer-overlay.active { opacity: 1; pointer-events: auto; }
+
+        .drawer {
+            position: fixed; top: 0; left: 0; bottom: 0; width: 320px; max-width: 85vw;
+            background-color: var(--md-sys-color-surface); box-shadow: var(--md-elevation-3);
+            z-index: 100; transform: translateX(-100%); transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            display: flex; flex-direction: column; overflow-y: auto;
+        }
+        .drawer.active { transform: translateX(0); }
+        .drawer-header { padding: 24px; background-color: var(--md-sys-color-surface-variant); font-size: 24px; font-weight: 500; }
+        .drawer-content { padding: 12px 0; flex: 1; display: flex; flex-direction: column; }
+        
+        .setting-group { padding: 12px 24px; display: flex; flex-direction: column; gap: 8px; }
+        .setting-group label { font-size: 12px; font-weight: 500; color: var(--md-sys-color-primary); }
+        .material-select {
+            width: 100%; padding: 10px; border-radius: 4px; border: 1px solid var(--md-sys-color-outline);
+            background-color: transparent; color: var(--md-sys-color-on-surface); font-size: 16px; outline: none;
+        }
+        
+        .switch-row { display: flex; justify-content: space-between; align-items: center; font-size: 14px; }
+        .switch { position: relative; display: inline-block; width: 44px; height: 24px; }
+        .switch input { opacity: 0; width: 0; height: 0; }
+        .slider { position: absolute; cursor: pointer; top: 0; left: 0; right: 0; bottom: 0; background-color: var(--md-sys-color-outline); transition: .3s; border-radius: 24px; }
+        .slider:before { position: absolute; content: ""; height: 18px; width: 18px; left: 3px; bottom: 3px; background-color: var(--md-sys-color-surface); transition: .3s; border-radius: 50%; }
+        input:checked + .slider { background-color: var(--md-sys-color-primary); }
+        input:checked + .slider:before { transform: translateX(20px); background-color: var(--md-sys-color-on-primary); }
+
+        .drawer-item { display: flex; align-items: center; gap: 16px; padding: 12px 24px; color: var(--md-sys-color-on-surface); text-decoration: none; font-size: 14px; font-weight: 500; }
+        .drawer-item:hover { background-color: rgba(128,128,128,0.1); }
+        .version-text { text-align: center; padding: 24px; font-size: 12px; color: var(--md-sys-color-outline); cursor: pointer; margin-top: auto; user-select: none; }
+
+        .workspace-wrapper { flex: 1; position: relative; background-color: #555; overflow: auto; display: flex; justify-content: center; align-items: flex-start; padding: 24px; }
+        .workspace { background-color: white; color: black; position: relative; box-shadow: var(--md-elevation-2); display: flex; flex-direction: column; transform-origin: top left; }
+        .slide { position: relative; border-bottom: 2px dashed #ccc; overflow: hidden; background: white;}
+        .slide:last-child { border-bottom: none; }
+        
+        .edit-layer { position: absolute; top: 0; left: 0; pointer-events: none; z-index: 5; }
+        .edit-layer.active { pointer-events: auto; }
+        .drawing-canvas { position: absolute; top: 0; left: 0; width: 100%; height: 100%; cursor: crosshair; }
+        .objects-layer { position: absolute; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none; }
+
+        .draggable-text { position: absolute; min-width: 50px; min-height: 24px; padding: 4px; pointer-events: auto; border: 1px dashed transparent; cursor: move; font-family: sans-serif; font-size: 24px; color: black; user-select: none; }
+        .draggable-text:hover { border-color: #999; }
+        .draggable-text[contenteditable="true"] { cursor: text; border-color: var(--md-sys-color-primary); background: rgba(255,255,255,0.8); }
+        .draggable-img { position: absolute; cursor: move; border: 1px dashed transparent; max-width: 80%; pointer-events: auto; }
+        .draggable-img:hover { border-color: #999; }
+
+        .modal-overlay { position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0,0,0,0.5); z-index: 200; display: flex; align-items: center; justify-content: center; opacity: 0; pointer-events: none; transition: opacity 0.2s; }
+        .modal-overlay.active { opacity: 1; pointer-events: auto; }
+        .modal { background: var(--md-sys-color-surface); border-radius: var(--md-radius); padding: 24px; width: 90%; max-width: 500px; box-shadow: var(--md-elevation-3); display: flex; flex-direction: column; gap: 16px; }
+        .modal-title { font-size: 20px; font-weight: 500; }
+        #signature-pad-container { border: 1px solid var(--md-sys-color-outline); border-radius: 4px; background: white; width: 100%; height: 250px; position: relative; }
+        #signature-canvas { width: 100%; height: 100%; cursor: crosshair; touch-action: none; }
+        .modal-actions { display: flex; justify-content: flex-end; gap: 8px; }
+
+        #loader { position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(255,255,255,0.7); z-index: 300; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 24px; opacity: 0; pointer-events: none; transition: opacity 0.3s; }
+        #loader.active { opacity: 1; pointer-events: auto; }
+        
+        #startup-screen { position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: var(--md-sys-color-background); z-index: 1000; display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 24px; text-align: center; transition: opacity 0.5s, transform 0.5s; }
+        #startup-screen.hidden { opacity: 0; pointer-events: none; transform: scale(1.05); }
+        .startup-title { font-size: 28px; font-weight: bold; color: var(--md-sys-color-primary); margin-bottom: 24px; }
+        .dl-progress-box { width: 100%; max-width: 300px; background: var(--md-sys-color-surface-variant); border-radius: 8px; height: 8px; overflow: hidden; margin-bottom: 12px; }
+        .dl-progress-bar { height: 100%; width: 0%; background: var(--md-sys-color-primary); transition: width 0.1s; }
+        .dl-text { font-size: 14px; color: var(--md-sys-color-on-background); opacity: 0.8; }
+
+        .spinner { width: 48px; height: 48px; border: 4px solid var(--md-sys-color-surface-variant); border-top-color: var(--md-sys-color-primary); border-radius: 50%; animation: spin 1s linear infinite; }
+        @keyframes spin { to { transform: rotate(360deg); } }
+
+        #easter-egg { position: fixed; top: 0; left: 0; right: 0; bottom: 0; background-color: var(--md-sys-color-primary); color: var(--md-sys-color-on-primary); display: flex; align-items: center; justify-content: center; font-size: 12vw; font-weight: 900; z-index: 9999; transform: scale(0); opacity: 0; pointer-events: none; transition: transform 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275), opacity 0.5s; }
+        #easter-egg.active { transform: scale(1); opacity: 1; pointer-events: auto; }
+        
+        #custom-theme-settings { display: none; flex-direction: column; gap: 8px; margin-top: 8px; }
+        #custom-theme-settings.active { display: flex; }
+        .color-row { display: flex; justify-content: space-between; align-items: center; }
+    </style>
+</head>
+<body>
+
+<svg style="display: none;">
+    <defs>
+        <g id="ic-menu"><path d="M3 18h18v-2H3v2zm0-5h18v-2H3v2zm0-7v2h18V6H3z"/></g>
+        <g id="ic-back"><path d="M20 11H7.83l5.59-5.59L12 4l-8 8 8 8 1.41-1.41L7.83 13H20v-2z"/></g>
+        <g id="ic-folder"><path d="M10 4H4c-1.1 0-1.99.9-1.99 2L2 18c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V8c0-1.1-.9-2-2-2h-8l-2-2z"/></g>
+        <g id="ic-edit"><path d="M3 17.25V21h3.75L17.81 9.94l-3.75-3.75L3 17.25zM20.71 7.04c.39-.39.39-1.02 0-1.41l-2.34-2.34c-.39-.39-1.02-.39-1.41 0l-1.83 1.83 3.75 3.75 1.83-1.83z"/></g>
+        <g id="ic-draw"><path d="M19.36 2.72L20.78 4.14L15.06 9.85l-1.41-1.41l5.71-5.72zm-8.28 10l-1.41-1.41L13.94 7L15.36 8.41L11.08 12.72zm5.72-2.12l-1.41-1.41L17.7 8.5l1.41 1.41l-2.31 2.3zM4 18h2.5L16.2 8.3L13.7 5.8L4 15.5V18zm0 2h16v2H4v-2z"/></g>
+        <g id="ic-eraser"><path d="M15.14 3c-.51 0-1.02.2-1.41.59L2.59 14.73c-.78.77-.78 2.04 0 2.83L5.03 20h7.66l8.72-8.72c.78-.79.78-2.07 0-2.86l-4.86-4.83c-.39-.39-.9-.59-1.41-.59zM12 18H6.41l-2.4-2.4 8.73-8.73 3.97 4L12 18z"/></g>
+        <g id="ic-text"><path d="M2.5 4v3h5v12h3V7h5V4h-13zm19 5h-9v3h3v7h3v-7h3V9z"/></g>
+        <g id="ic-sign"><path d="M3 17.25V21h3.75L17.81 9.94l-3.75-3.75L3 17.25zM21.41 6.34l-3.75-3.75-2.53 2.54 3.75 3.75 2.53-2.54z"/></g>
+        <g id="ic-undo"><path d="M12.5 8c-2.65 0-5.05.99-6.9 2.6L2 7v9h9l-3.62-3.62c1.39-1.16 3.16-1.88 5.12-1.88 3.54 0 6.55 2.31 7.6 5.5l2.37-.78C21.08 11.03 17.15 8 12.5 8z"/></g>
+        <g id="ic-redo"><path d="M18.4 10.6C16.55 8.99 14.15 8 11.5 8c-4.65 0-8.58 3.03-9.96 7.22L3.9 16c1.05-3.19 4.05-5.5 7.6-5.5 1.95 0 3.73.72 5.12 1.88L13 16h9V7l-3.6 3.6z"/></g>
+        <g id="ic-check"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/></g>
+        <g id="ic-export"><path d="M19 9h-4V3H9v6H5l7 7 7-7zM5 18v2h14v-2H5z"/></g>
+        <g id="ic-share"><path d="M18 16.08c-.76 0-1.44.3-1.96.77L8.91 12.7c.05-.23.09-.46.09-.7s-.04-.47-.09-.7l7.05-4.11c.54.5 1.25.81 2.04.81 1.66 0 3-1.34 3-3s-1.34-3-3-3-3 1.34-3 3c0 .24.04.47.09.7L8.04 9.81C7.5 9.31 6.79 9 6 9c-1.66 0-3 1.34-3 3s1.34 3 3 3c.79 0 1.5-.31 2.04-.81l7.12 4.16c-.05.21-.08.43-.08.65 0 1.61 1.31 2.92 2.92 2.92 1.61 0 2.92-1.31 2.92-2.92s-1.31-2.92-2.92-2.92z"/></g>
+        <g id="ic-print"><path d="M19 8H5c-1.66 0-3 1.34-3 3v6h4v4h12v-4h4v-6c0-1.66-1.34-3-3-3zm-3 11H8v-5h8v5zm3-7c-.55 0-1-.45-1-1s.45-1 1-1 1 .45 1 1-.45 1-1 1zm-1-9H6v4h12V3z"/></g>
+        <g id="ic-star"><path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/></g>
+        <g id="ic-rate"><path d="M19 3h-4.18C14.4 1.84 13.3 1 12 1c-1.3 0-2.4.84-2.82 2H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-7 0c.55 0 1 .45 1 1s-.45 1-1 1-1-.45-1-1 .45-1 1-1zm2 14H7v-2h7v2zm3-4H7v-2h10v2zm0-4H7V7h10v2z"/></g>
+        <g id="ic-license"><path d="M12 2L2 22h20L12 2zm0 3.8l6.3 12.2H5.7L12 5.8z"/></g>
+        <g id="ic-bug"><path d="M20 8h-2.81c-.45-.78-1.07-1.45-1.82-1.96L17 4.41 15.59 3l-2.17 2.17C12.96 5.06 12.49 5 12 5c-.49 0-.96.06-1.41.17L8.41 3 7 4.41l1.62 1.63C7.88 6.55 7.26 7.22 6.81 8H4v2h2.09c-.05.33-.09.66-.09 1v1H4v2h2v1c0 .34.04.67.09 1H4v2h2.81c1.04 1.79 2.97 3 5.19 3s4.15-1.21 5.19-3H20v-2h-2.09c.05-.33.09-.66.09-1v-1h2v-2h-2v-1c0-.34-.04-.67-.09-1H20V8zm-6 8h-4v-2h4v2zm0-4h-4v-2h4v2z"/></g>
+        <g id="ic-privacy"><path d="M12 1L3 5v6c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V5l-9-4zm0 10.99h7c-.53 4.12-3.28 7.79-7 8.94V12H5V6.3l7-3.11v8.8z"/></g>
+        <g id="ic-battery-full"><path d="M15.67 4H14V2h-4v2H8.33C7.6 4 7 4.6 7 5.33v15.33C7 21.4 7.6 22 8.33 22h7.33c.74 0 1.34-.6 1.34-1.33V5.33C17 4.6 16.4 4 15.67 4z"/></g>
+        <g id="ic-battery-charging"><path d="M15.67 4H14V2h-4v2H8.33C7.6 4 7 4.6 7 5.33v15.33C7 21.4 7.6 22 8.33 22h7.33c.74 0 1.34-.6 1.34-1.33V5.33C17 4.6 16.4 4 15.67 4zM11 20v-5.5H9L13 7v5.5h2L11 20z"/></g>
+        <g id="ic-github"><path d="M12 .297c-6.63 0-12 5.373-12 12 0 5.303 3.438 9.8 8.205 11.385.6.113.82-.258.82-.577 0-.285-.01-1.04-.015-2.04-3.338.724-4.042-1.61-4.042-1.61C4.422 18.07 3.633 17.7 3.633 17.7c-1.087-.744.084-.729.084-.729 1.205.084 1.838 1.236 1.838 1.236 1.07 1.835 2.809 1.305 3.495.998.108-.776.417-1.305.76-1.605-2.665-.3-5.466-1.332-5.466-5.93 0-1.31.465-2.38 1.235-3.22-.135-.303-.54-1.523.105-3.176 0 0 1.005-.322 3.3 1.23.96-.267 1.98-.399 3-.405 1.02.006 2.04.138 3 .405 2.28-1.552 3.285-1.23 3.285-1.23.645 1.653.24 2.873.12 3.176.765.84 1.23 1.91 1.23 3.22 0 4.61-2.805 5.625-5.475 5.92.42.36.81 1.096.81 2.22 0 1.606-.015 2.896-.015 3.286 0 .315.21.69.825.57C20.565 22.092 24 17.592 24 12.297c0-6.627-5.373-12-12-12"/></g>
+    </defs>
+</svg>
+
+<div id="startup-screen" class="screen">
+    <div class="startup-title">Busya PPT/PPTX</div>
+    <div class="dl-progress-box">
+        <div id="dl-progress-bar" class="dl-progress-bar"></div>
+    </div>
+    <div id="dl-text" class="dl-text" data-i18n="downloadingLibs">Скачивание библиотек...</div>
+</div>
+
+<div class="drawer-overlay" id="drawer-overlay"></div>
+<nav class="drawer" id="settings-drawer">
+    <div class="drawer-header" data-i18n="settings">Настройки</div>
+    <div class="drawer-content">
+        <div class="setting-group">
+            <label data-i18n="language">Язык</label>
+            <select id="lang-select" class="material-select">
+                <option value="ru">Русский</option>
+                <option value="en">English</option>
+                <option value="ar">العربية</option>
+                <option value="zh">中文</option>
+                <option value="be">Беларуская</option>
+                <option value="mk">Македонски</option>
+                <option value="de">Deutsch</option>
+                <option value="fr">Français</option>
+                <option value="ja">日本語</option>
+            </select>
+        </div>
+        
+        <div class="setting-group">
+            <label data-i18n="theme">Тема</label>
+            <select id="theme-select" class="material-select">
+                <option value="light" data-i18n="themeLight">Светлая</option>
+                <option value="dark" data-i18n="themeDark">Тёмная</option>
+                <option value="blue" data-i18n="themeBlue">Синяя</option>
+                <option value="green" data-i18n="themeGreen">Зелёная</option>
+                <option value="red" data-i18n="themeRed">Красная</option>
+                <option value="orange" data-i18n="themeOrange">Оранжевая</option>
+                <option value="yellow" data-i18n="themeYellow">Жёлтая</option>
+                <option value="purple" data-i18n="themePurple">Фиолетовая</option>
+                <option value="brown" data-i18n="themeBrown">Коричневая</option>
+                <option value="pink" data-i18n="themePink">Розовая</option>
+                <option value="custom" data-i18n="themeCustom">Своя</option>
+            </select>
+            <div id="custom-theme-settings">
+                <div class="color-row"><span data-i18n="bgColor" style="font-size:14px;">Фон</span><input type="color" id="custom-bg" value="#ffffff"></div>
+                <div class="color-row"><span data-i18n="primaryColor" style="font-size:14px;">Основной</span><input type="color" id="custom-primary" value="#6200ee"></div>
+            </div>
+        </div>
+
+        <div class="setting-group" style="padding-top:4px; padding-bottom:4px;">
+            <div class="switch-row">
+                <span data-i18n="showDate">Показывать дату</span>
+                <label class="switch"><input type="checkbox" id="toggle-date" checked><span class="slider"></span></label>
+            </div>
+            <div class="switch-row" style="margin-top:8px;">
+                <span data-i18n="showTime">Показывать время</span>
+                <label class="switch"><input type="checkbox" id="toggle-time" checked><span class="slider"></span></label>
+            </div>
+            <div class="switch-row" style="margin-top:8px;">
+                <span data-i18n="showBattery">Показывать заряд</span>
+                <label class="switch"><input type="checkbox" id="toggle-battery" checked><span class="slider"></span></label>
+            </div>
+        </div>
+
+        <hr style="border: none; border-top: 1px solid var(--md-sys-color-outline); opacity: 0.2; margin: 8px 0;">
+
+        <a href="https://github.com/berestnevnikolaj671-kot/Busya-PPT-and-PPTX-view-read/tree/main" target="_blank" class="drawer-item ripple"><svg class="icon"><use href="#ic-star"></use></svg> <span data-i18n="starGithub">Поставить звёздочку на GitHub</span></a>
+        <a href="https://forms.gle/p69pd3YoivYMCrsN6" target="_blank" class="drawer-item ripple"><svg class="icon"><use href="#ic-rate"></use></svg> <span data-i18n="rateGoogle">Оценить на Google Forms</span></a>
+        <a href="https://github.com/berestnevnikolaj671-kot/Busya-PPT-and-PPTX-view-read/blob/main/LICENSE" target="_blank" class="drawer-item ripple"><svg class="icon"><use href="#ic-license"></use></svg> <span data-i18n="license">Лицензия (UNLICENSE)</span></a>
+        <a href="https://forms.gle/yoH6UsUYw1jtBuBy7" target="_blank" class="drawer-item ripple"><svg class="icon"><use href="#ic-bug"></use></svg> <span data-i18n="reportBug">Сообщить об ошибке</span></a>
+        <a href="https://github.com/berestnevnikolaj671-kot/Busya-PPT-and-PPTX-view-read/blob/main/Privacy%20Policy" target="_blank" class="drawer-item ripple"><svg class="icon"><use href="#ic-privacy"></use></svg> <span data-i18n="privacyPolicy">Политика конфиденциальности</span></a>
+        <a href="https://github.com/berestnevnikolaj671-kot/Busya-PPT-and-PPTX-view-read/tree/main" target="_blank" class="drawer-item ripple"><svg class="icon"><use href="#ic-github"></use></svg> <span data-i18n="myProject">Мой проект на GitHub</span></a>
+        <button id="share-app-btn" class="drawer-item ripple" style="width: 100%; border: none; background: transparent; cursor: pointer; text-align: left; font-family: inherit;"><svg class="icon"><use href="#ic-share"></use></svg> <span data-i18n="shareApp">Поделиться приложением</span></button>
+    </div>
+    <div id="version" class="version-text" data-i18n="version">Версия 1.0.0</div>
+</nav>
+
+<div id="main-screen" class="screen">
+    <header class="app-bar">
+        <button id="menu-btn" class="btn-icon ripple"><svg class="icon"><use href="#ic-menu"></use></svg></button>
+        <div class="app-bar-title">Busya PPT/PPTX</div>
+        <div class="status-indicators">
+            <div class="status-item" id="date-status">--.--.----</div>
+            <div class="status-item" id="time-status">--:--:--</div>
+            <div class="status-item battery" id="battery-status"><span id="battery-text">100%</span><svg class="icon" id="battery-icon" style="width:16px;height:16px;"><use href="#ic-battery-full"></use></svg></div>
+        </div>
+    </header>
+    <main class="content-center">
+        <button id="trigger-file-btn" class="btn btn-filled ripple">
+            <svg class="icon" style="fill: currentColor"><use href="#ic-folder"></use></svg> 
+            <span data-i18n="openFile">Открыть PPT или PPTX</span>
+        </button>
+        <input type="file" id="file-input" accept=".ppt,.pptx" hidden>
+    </main>
+</div>
+
+<div id="viewer-screen" class="screen hidden">
+    <!-- View Toolbar -->
+    <header class="app-bar" id="view-toolbar">
+        <button id="back-btn" class="btn-icon ripple"><svg class="icon"><use href="#ic-back"></use></svg></button>
+        <div class="app-bar-title" id="ppt-title">Document.pptx</div>
+        <div class="toolbar-actions">
+            <button class="btn-icon ripple" id="btn-enable-edit" title="Редактировать"><svg class="icon"><use href="#ic-edit"></use></svg></button>
+            <button class="btn-icon ripple" id="btn-export-menu" title="Экспорт"><svg class="icon"><use href="#ic-export"></use></svg></button>
+            <button class="btn-icon ripple" id="btn-print" title="Печать"><svg class="icon"><use href="#ic-print"></use></svg></button>
+            <button class="btn-icon ripple" id="btn-share-file" title="Поделиться"><svg class="icon"><use href="#ic-share"></use></svg></button>
+        </div>
+        
+        <div class="menu-dropdown" id="export-dropdown">
+            <a class="menu-item" id="export-png">Сохранить как PNG</a>
+            <a class="menu-item" id="export-jpeg">Сохранить как JPEG</a>
+            <a class="menu-item" id="export-webp">Сохранить как WebP</a>
+            <a class="menu-item" id="export-pdf">Сохранить как PDF</a>
+            <a class="menu-item" id="export-pptx" style="display:none;">Сохранить как PPTX</a>
+            <a class="menu-item" id="export-ppt" style="display:none;">Сохранить как PPT</a>
+        </div>
+    </header>
+
+    <!-- Editor Toolbar -->
+    <header class="app-bar" id="editor-toolbar">
+        <div class="toolbar-group">
+            <button class="btn-icon ripple tool-btn" data-tool="draw" title="Рисовать"><svg class="icon"><use href="#ic-draw"></use></svg></button>
+            <button class="btn-icon ripple tool-btn" data-tool="eraser" title="Ластик"><svg class="icon"><use href="#ic-eraser"></use></svg></button>
+            <button class="btn-icon ripple tool-btn" data-tool="text" title="Текст"><svg class="icon"><use href="#ic-text"></use></svg></button>
+            <button class="btn-icon ripple" id="btn-sign" title="Подпись"><svg class="icon"><use href="#ic-sign"></use></svg></button>
+        </div>
+        <div class="divider"></div>
+        <div class="toolbar-group">
+            <button class="btn-icon ripple" id="btn-undo" title="Отменить"><svg class="icon"><use href="#ic-undo"></use></svg></button>
+            <button class="btn-icon ripple" id="btn-redo" title="Повторить"><svg class="icon"><use href="#ic-redo"></use></svg></button>
+        </div>
+        <div style="flex:1;"></div>
+        <button class="btn-icon ripple" id="btn-save-edit" style="color: var(--md-sys-color-primary);" title="Применить"><svg class="icon"><use href="#ic-check"></use></svg></button>
+    </header>
+
+    <!-- Sub Settings -->
+    <div id="tool-settings" class="tool-settings">
+        <label data-i18n="color" id="color-lbl">Цвет:</label> 
+        <input type="color" id="tool-color" value="#d32f2f" style="border:none; width:30px; height:30px; padding:0; border-radius:50%; cursor:pointer;">
+        <label data-i18n="brushSize" id="brush-lbl">Размер:</label> 
+        <input type="range" id="tool-size" min="1" max="60" value="4">
+    </div>
+
+    <!-- Workspace -->
+    <div class="workspace-wrapper" id="workspace-container">
+        <div class="workspace" id="workspace">
+            <div id="presentation-content" style="width: 100%; display: flex; flex-direction: column;"></div>
+            
+            <div id="edit-layer" class="edit-layer">
+                <canvas class="drawing-canvas" id="drawing-canvas"></canvas>
+                <div class="objects-layer" id="objects-layer"></div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal-overlay" id="signature-modal">
+    <div class="modal">
+        <div class="modal-title" data-i18n="signature">Подписать</div>
+        <div id="signature-pad-container"><canvas id="signature-canvas"></canvas></div>
+        <div class="modal-actions">
+            <button class="btn ripple" id="btn-sig-clear" data-i18n="clear">Очистить</button>
+            <button class="btn btn-filled ripple" id="btn-sig-save"><svg class="icon" style="fill:currentColor; width:18px; height:18px;"><use href="#ic-check"></use></svg> <span data-i18n="save">Сохранить</span></button>
+        </div>
+    </div>
+</div>
+
+<div class="modal-overlay" id="msg-modal">
+    <div class="modal">
+        <div class="modal-title" id="msg-title">Внимание</div>
+        <div id="msg-content" style="margin-bottom: 16px; font-size: 14px; color: var(--md-sys-color-on-surface-variant); word-wrap:break-word;"></div>
+        <div class="modal-actions"><button class="btn btn-filled ripple" id="btn-msg-ok">ОК</button></div>
+    </div>
+</div>
+
+<div id="easter-egg">By BusyaTM</div>
+<div id="loader">
+    <div class="spinner"></div>
+    <div id="loader-text" style="font-weight: 500; opacity: 0.8;">Обработка файла...</div>
+</div>
+
+<script>
+    const translations = {
+        ru: {
+            settings: "Настройки", language: "Язык", theme: "Тема", themeLight: "Светлая", themeDark: "Тёмная",
+            themeBlue: "Синяя", themeGreen: "Зелёная", themeRed: "Красная", themeOrange: "Оранжевая", themeYellow: "Жёлтая", themePurple: "Фиолетовая", themeBrown: "Коричневая", themePink: "Розовая", themeCustom: "Своя", bgColor: "Фон", primaryColor: "Основной",
+            starGithub: "Поставить звёздочку на GitHub", rateGoogle: "Оценить на Google Forms", license: "Лицензия (UNLICENSE)",
+            reportBug: "Сообщить об ошибке", privacyPolicy: "Политика конфиденциальности", myProject: "Мой проект на GitHub",
+            shareApp: "Поделиться приложением", shareAppText: "Откройте для себя Busya PPT/PPTX Reader — невероятно быстрый и удобный инструмент для просмотра и редактирования презентаций прямо на устройстве! 🚀", version: "Версия 1.0.0", openFile: "Открыть PPT или PPTX", signature: "Подписать",
+            clear: "Очистить", save: "Сохранить", color: "Цвет", brushSize: "Размер", downloadingLibs: "Скачивание библиотек...", parsingError: "Ошибка чтения файла.",
+            binaryLimited: "Открыт старый формат PPT. Ниже показан извлечённый текст. Для полноценного просмотра конвертируйте в PPTX.", showDate: "Показывать дату", showTime: "Показывать время", showBattery: "Показывать заряд"
+        },
+        en: {
+            settings: "Settings", language: "Language", theme: "Theme", themeLight: "Light", themeDark: "Dark",
+            themeBlue: "Blue", themeGreen: "Green", themeRed: "Red", themeOrange: "Orange", themeYellow: "Yellow", themePurple: "Purple", themeBrown: "Brown", themePink: "Pink", themeCustom: "Custom", bgColor: "Background", primaryColor: "Primary",
+            starGithub: "Star on GitHub", rateGoogle: "Rate on Google Forms", license: "License (UNLICENSE)",
+            reportBug: "Report a bug", privacyPolicy: "Privacy Policy", myProject: "My project on GitHub",
+            shareApp: "Share app", shareAppText: "Discover Busya PPT/PPTX Reader — an incredibly fast and convenient tool for viewing and editing presentations right on your device! 🚀", version: "Version 1.0.0", openFile: "Open PPT or PPTX", signature: "Sign",
+            clear: "Clear", save: "Save", color: "Color", brushSize: "Size", downloadingLibs: "Downloading libraries...", parsingError: "File read error.",
+            binaryLimited: "Old PPT format opened. Extracted text is shown below. Convert to PPTX for full viewing.", showDate: "Show date", showTime: "Show time", showBattery: "Show battery"
+        },
+        ar: {
+            settings: "الإعدادات", language: "اللغة", theme: "السمة", themeLight: "فاتح", themeDark: "داكن",
+            themeBlue: "أزرق", themeGreen: "أخضر", themeRed: "أحمر", themeOrange: "برتقالي", themeYellow: "أصفر", themePurple: "أرجواني", themeBrown: "بني", themePink: "وردي", themeCustom: "مخصص", bgColor: "الخلفية", primaryColor: "أساسي",
+            starGithub: "نجمة على GitHub", rateGoogle: "قيّمنا على نماذج جوجل", license: "الترخيص (UNLICENSE)",
+            reportBug: "الإبلاغ عن خطأ", privacyPolicy: "سياسة الخصوصية", myProject: "مشروعي على GitHub",
+            shareApp: "مشاركة التطبيق", shareAppText: "اكتشف Busya PPT/PPTX Reader — أداة سريعة ومريحة بشكل لا يصدق لعرض وتحرير العروض التقديمية مباشرة على جهازك! 🚀", version: "الإصدار 1.0.0", openFile: "فتح PPT أو PPTX", signature: "يوقع",
+            clear: "مسح", save: "حفظ", color: "اللون", brushSize: "الحجم", downloadingLibs: "تنزيل المكتبات...", parsingError: "خطأ في قراءة الملف.",
+            binaryLimited: "تم فتح تنسيق PPT قديم. يتم عرض النص المستخرج أدناه. قم بالتحويل إلى PPTX للعرض الكامل.", showDate: "إظهار التاريخ", showTime: "إظهار الوقت", showBattery: "إظهار البطارية"
+        },
+        zh: {
+            settings: "设置", language: "语言", theme: "主题", themeLight: "浅色", themeDark: "深色",
+            themeBlue: "蓝色", themeGreen: "绿色", themeRed: "红色", themeOrange: "橙色", themeYellow: "黄色", themePurple: "紫色", themeBrown: "棕色", themePink: "粉红色", themeCustom: "自定义", bgColor: "背景", primaryColor: "主要",
+            starGithub: "在 GitHub 上标星", rateGoogle: "在 Google Forms 上评分", license: "许可证 (UNLICENSE)",
+            reportBug: "报告错误", privacyPolicy: "隐私政策", myProject: "我在 GitHub 上的项目",
+            shareApp: "分享应用", shareAppText: "探索 Busya PPT/PPTX Reader — 一款非常快速且方便的工具，可直接在您的设备上查看和编辑演示文稿！🚀", version: "版本 1.0.0", openFile: "打开 PPT 或 PPTX", signature: "签名",
+            clear: "清除", save: "保存", color: "颜色", brushSize: "大小", downloadingLibs: "正在下载库...", parsingError: "文件读取错误。",
+            binaryLimited: "已打开旧的 PPT 格式。下面显示了提取的文本。转换为 PPTX 即可完整查看。", showDate: "显示日期", showTime: "显示时间", showBattery: "显示电池"
+        },
+        be: {
+            settings: "Налады", language: "Мова", theme: "Тэма", themeLight: "Светлая", themeDark: "Цёмная",
+            themeBlue: "Сіняя", themeGreen: "Зялёная", themeRed: "Чырвоная", themeOrange: "Аранжавая", themeYellow: "Жоўтая", themePurple: "Фіялетавая", themeBrown: "Карычневая", themePink: "Ружовая", themeCustom: "Свая", bgColor: "Фон", primaryColor: "Асноўны",
+            starGithub: "Паставіць зорку на GitHub", rateGoogle: "Ацаніць на Google Forms", license: "Ліцэнзія (UNLICENSE)",
+            reportBug: "Паведаміць пра памылку", privacyPolicy: "Палітыка прыватнасці", myProject: "Мой праект на GitHub",
+            shareApp: "Падзяліцца праграмай", shareAppText: "Адкрыйце для сябе Busya PPT/PPTX Reader — неверагодна хуткі і зручны інструмент для прагляду і рэдагавання прэзентацый прама на прыладзе! 🚀", version: "Версія 1.0.0", openFile: "Адкрыць PPT ці PPTX", signature: "Падпісаць",
+            clear: "Ачысціць", save: "Захаваць", color: "Колер", brushSize: "Памер", downloadingLibs: "Спампоўванне бібліятэк...", parsingError: "Памылка чытання файла.",
+            binaryLimited: "Адкрыты стары фармат PPT. Ніжэй паказаны здабыты тэкст. Для паўнавартаснага прагляду канвертуйце ў PPTX.", showDate: "Паказваць дату", showTime: "Паказваць час", showBattery: "Паказваць зарад"
+        },
+        mk: {
+            settings: "Поставки", language: "Јазик", theme: "Тема", themeLight: "Светла", themeDark: "Темна",
+            themeBlue: "Сина", themeGreen: "Зелена", themeRed: "Црвена", themeOrange: "Портокалова", themeYellow: "Жолта", themePurple: "Виолетова", themeBrown: "Кафеава", themePink: "Розова", themeCustom: "Прилагодена", bgColor: "Позадина", primaryColor: "Примарна",
+            starGithub: "Стави ѕвезда на GitHub", rateGoogle: "Оцени на Google Forms", license: "Лиценца (UNLICENSE)",
+            reportBug: "Пријави грешка", privacyPolicy: "Политика за приватност", myProject: "Мој проект на GitHub",
+            shareApp: "Сподели апликација", shareAppText: "Откријте го Busya PPT/PPTX Reader — неверојатно брза и удобна алатка за прегледување и уредување презентации директно на вашиот уред! 🚀", version: "Верзија 1.0.0", openFile: "Отвори PPT или PPTX", signature: "Потпиши",
+            clear: "Исчисти", save: "Зачувај", color: "Боја", brushSize: "Големина", downloadingLibs: "Преземање библиотеки...", parsingError: "Грешка при читање на датотеката.",
+            binaryLimited: "Отворен е стар PPT формат. Извлечениот текст е прикажан подолу. Конвертирајте во PPTX за целосен преглед.", showDate: "Прикажи датум", showTime: "Прикажи време", showBattery: "Прикажи батерија"
+        },
+        de: {
+            settings: "Einstellungen", language: "Sprache", theme: "Thema", themeLight: "Hell", themeDark: "Dunkel",
+            themeBlue: "Blau", themeGreen: "Grün", themeRed: "Rot", themeOrange: "Orange", themeYellow: "Gelb", themePurple: "Lila", themeBrown: "Braun", themePink: "Rosa", themeCustom: "Benutzerdefiniert", bgColor: "Hintergrund", primaryColor: "Primär",
+            starGithub: "Stern auf GitHub", rateGoogle: "Bewerten Sie auf Google Forms", license: "Lizenz (UNLICENSE)",
+            reportBug: "Fehler melden", privacyPolicy: "Datenschutz", myProject: "Mein Projekt auf GitHub",
+            shareApp: "App teilen", shareAppText: "Entdecken Sie Busya PPT/PPTX Reader — ein unglaublich schnelles und praktisches Tool zum Anzeigen und Bearbeiten von Präsentationen direkt auf Ihrem Gerät! 🚀", version: "Version 1.0.0", openFile: "PPT/PPTX öffnen", signature: "Unterschreiben",
+            clear: "Löschen", save: "Speichern", color: "Farbe", brushSize: "Größe", downloadingLibs: "Bibliotheken herunterladen...", parsingError: "Dateilesefehler.",
+            binaryLimited: "Altes PPT-Format geöffnet. Der extrahierte Text wird unten angezeigt. Für eine vollständige Ansicht in PPTX konvertieren.", showDate: "Datum anzeigen", showTime: "Zeit anzeigen", showBattery: "Batterie anzeigen"
+        },
+        fr: {
+            settings: "Paramètres", language: "Langue", theme: "Thème", themeLight: "Clair", themeDark: "Sombre",
+            themeBlue: "Bleu", themeGreen: "Vert", themeRed: "Rouge", themeOrange: "Orange", themeYellow: "Jaune", themePurple: "Violet", themeBrown: "Marron", themePink: "Rose", themeCustom: "Personnalisé", bgColor: "Arrière-plan", primaryColor: "Primaire",
+            starGithub: "Étoile sur GitHub", rateGoogle: "Évaluer sur Google Forms", license: "Licence (UNLICENSE)",
+            reportBug: "Signaler un bug", privacyPolicy: "Confidentialité", myProject: "Projet sur GitHub",
+            shareApp: "Partager l'application", shareAppText: "Découvrez Busya PPT/PPTX Reader — un outil incroyablement rapide et pratique pour visualiser et éditer des présentations directement sur votre appareil ! 🚀", version: "Version 1.0.0", openFile: "Ouvrir PPT ou PPTX", signature: "Signer",
+            clear: "Effacer", save: "Enregistrer", color: "Couleur", brushSize: "Taille", downloadingLibs: "Téléchargement...", parsingError: "Erreur de lecture.",
+            binaryLimited: "Ancien format PPT ouvert. Le texte extrait est affiché ci-dessous. Convertissez en PPTX pour un affichage complet.", showDate: "Afficher la date", showTime: "Afficher l'heure", showBattery: "Afficher la batterie"
+        },
+        ja: {
+            settings: "設定", language: "言語", theme: "テーマ", themeLight: "ライト", themeDark: "ダーク",
+            themeBlue: "ブルー", themeGreen: "グリーン", themeRed: "赤", themeOrange: "オレンジ", themeYellow: "黄色", themePurple: "紫", themeBrown: "茶色", themePink: "ピンク", themeCustom: "カスタム", bgColor: "背景", primaryColor: "メイン",
+            starGithub: "GitHubでスター", rateGoogle: "Google Formsで評価", license: "ライセンス",
+            reportBug: "バグを報告", privacyPolicy: "プライバシーポリシー", myProject: "GitHubプロジェクト",
+            shareApp: "アプリを共有", shareAppText: "Busya PPT/PPTX Reader を発見 — デバイス上でプレゼンテーションを表示および編集するための、信じられないほど高速で便利なツール！🚀", version: "バージョン 1.0.0", openFile: "PPT/PPTXを開く", signature: "署名",
+            clear: "クリア", save: "保存", color: "色", brushSize: "サイズ", downloadingLibs: "ライブラリをダウンロード中...", parsingError: "読み込みエラー。",
+            binaryLimited: "古いPPT形式が開かれました。抽出されたテキストが以下に表示されます。完全に表示するにはPPTXに変換してください。", showDate: "日付を表示", showTime: "時間を表示", showBattery: "バッテリーを表示"
+        }
+    };
+
+    let currentLang = localStorage.getItem('busya_lang') || 'ru';
+    let currentTheme = localStorage.getItem('busya_theme') || 'light';
+    let customBg = localStorage.getItem('busya_custom_bg') || '#ffffff';
+    let customPrimary = localStorage.getItem('busya_custom_primary') || '#6200ee';
+    
+    let activeTool = null;
+    let isDrawing = false;
+    let undoStack = [];
+    let redoStack = [];
+    let canvasCtx = null;
+    let sigCtx = null;
+    window.currentScale = 1;
+
+    document.addEventListener('DOMContentLoaded', async () => {
+        applyLanguage(currentLang); document.getElementById('lang-select').value = currentLang;
+        applyTheme(currentTheme); document.getElementById('theme-select').value = currentTheme;
+        
+        setupSettingsToggles(); initClock(); initBattery();
+        setupEventListeners(); initCanvas();
+        
+        document.getElementById('btn-msg-ok').onclick = () => document.getElementById('msg-modal').classList.remove('active');
+
+        // Blocking startup process to ensure libraries are ready
+        await initializeLibraries();
+    });
+
+    function showMessage(title, text) {
+        document.getElementById('msg-title').textContent = title;
+        document.getElementById('msg-content').textContent = text;
+        document.getElementById('msg-modal').classList.add('active');
+    }
+
+    const LIBS_TO_LOAD = [
+        { key: 'jszip', url: 'https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js' },
+        { key: 'html2canvas', url: 'https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js' },
+        { key: 'jspdf', url: 'https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js' },
+        { key: 'pptxgen', url: 'https://cdn.jsdelivr.net/gh/gitbrent/PptxGenJS/dist/pptxgen.bundle.js' }
+    ];
+
+    async function initializeLibraries() {
+        try {
+            const db = await openIDB();
+            const toDownload = [];
+            
+            for (const lib of LIBS_TO_LOAD) {
+                const cached = await getFromIDB(db, lib.key);
+                if (cached) { injectScript(cached); }
+                else { toDownload.push(lib); }
+            }
+
+            if (toDownload.length > 0) {
+                document.getElementById('startup-screen').classList.remove('hidden');
+                let progressMap = {};
+                
+                for (const lib of toDownload) {
+                    const code = await fetchWithProgress(lib.url, (loaded, total) => {
+                        progressMap[lib.key] = {loaded, total: total || 500000};
+                        let sumLoaded = 0, sumTotal = 0;
+                        for(let k in progressMap) { sumLoaded += progressMap[k].loaded; sumTotal += progressMap[k].total; }
+                        let percent = Math.min(100, Math.round((sumLoaded / sumTotal) * 100));
+                        document.getElementById('dl-progress-bar').style.width = percent + '%';
+                        document.getElementById('dl-text').textContent = `${translations[currentLang].downloadingLibs} ${percent}% (${(sumLoaded/1024/1024).toFixed(1)}MB)`;
+                    });
+                    await saveToIDB(db, lib.key, code);
+                    injectScript(code);
+                }
+            }
+            setTimeout(() => document.getElementById('startup-screen').classList.add('hidden'), 500);
+        } catch (e) {
+            document.getElementById('dl-text').textContent = "Ошибка сети при загрузке: " + e.message;
+            document.getElementById('dl-progress-bar').style.background = "red";
+        }
+    }
+
+    function fetchWithProgress(url, onProgress) {
+        return new Promise((resolve, reject) => {
+            const xhr = new XMLHttpRequest(); xhr.open('GET', url, true);
+            xhr.onprogress = (e) => onProgress(e.loaded, e.total);
+            xhr.onload = () => { if (xhr.status >= 200 && xhr.status < 300) resolve(xhr.responseText); else reject(new Error(xhr.statusText)); };
+            xhr.onerror = () => reject(new Error("Network Error"));
+            xhr.send();
+        });
+    }
+
+    function injectScript(code) {
+        const blob = new Blob([code], { type: 'application/javascript' });
+        const script = document.createElement('script'); script.src = URL.createObjectURL(blob);
+        document.head.appendChild(script);
+    }
+
+    function openIDB() {
+        return new Promise((resolve, reject) => {
+            const req = indexedDB.open('BusyaPPT_DB', 1);
+            req.onupgradeneeded = (e) => e.target.result.createObjectStore('Libraries');
+            req.onsuccess = () => resolve(req.result); req.onerror = () => reject(req.error);
+        });
+    }
+    function getFromIDB(db, key) {
+        return new Promise(resolve => {
+            const req = db.transaction('Libraries', 'readonly').objectStore('Libraries').get(key);
+            req.onsuccess = () => resolve(req.result); req.onerror = () => resolve(null);
+        });
+    }
+    function saveToIDB(db, key, data) {
+        return new Promise(resolve => {
+            const tx = db.transaction('Libraries', 'readwrite');
+            tx.objectStore('Libraries').put(data, key); tx.oncomplete = () => resolve();
+        });
+    }
+
+    function applyLanguage(lang) {
+        currentLang = lang; localStorage.setItem('busya_lang', lang);
+        document.body.setAttribute('dir', lang === 'ar' ? 'rtl' : 'ltr');
+        document.querySelectorAll('[data-i18n]').forEach(el => {
+            const key = el.getAttribute('data-i18n');
+            if (translations[lang] && translations[lang][key]) el.textContent = translations[lang][key];
+        });
+        document.getElementById('export-png').textContent = translations[lang].save + ' PNG';
+        document.getElementById('export-jpeg').textContent = translations[lang].save + ' JPEG';
+        document.getElementById('export-webp').textContent = translations[lang].save + ' WebP';
+        document.getElementById('export-pdf').textContent = translations[lang].save + ' PDF';
+    }
+
+    function applyTheme(theme) {
+        currentTheme = theme; localStorage.setItem('busya_theme', theme);
+        document.documentElement.setAttribute('data-theme', theme);
+        const customSettings = document.getElementById('custom-theme-settings');
+        if (theme === 'custom') {
+            customSettings.classList.add('active');
+            document.documentElement.style.setProperty('--md-sys-color-background', customBg);
+            document.documentElement.style.setProperty('--md-sys-color-primary', customPrimary);
+            const rgb = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(customBg);
+            const bright = rgb ? Math.round(((parseInt(rgb[1],16)*299)+(parseInt(rgb[2],16)*587)+(parseInt(rgb[3],16)*114))/1000) : 255;
+            const textColor = bright > 125 ? '#1c1b1f' : '#ffffff';
+            document.documentElement.style.setProperty('--md-sys-color-on-background', textColor);
+            document.documentElement.style.setProperty('--md-sys-color-surface', customBg);
+            document.documentElement.style.setProperty('--md-sys-color-on-surface', textColor);
+        } else {
+            customSettings.classList.remove('active');
+            ['--md-sys-color-background', '--md-sys-color-primary', '--md-sys-color-on-background', '--md-sys-color-surface', '--md-sys-color-on-surface'].forEach(p => document.documentElement.style.removeProperty(p));
+        }
+    }
+
+    function setupSettingsToggles() {
+        const dOpt = localStorage.getItem('busya_show_date') !== 'false';
+        const tOpt = localStorage.getItem('busya_show_time') !== 'false';
+        const bOpt = localStorage.getItem('busya_show_battery') !== 'false';
+        
+        const dTog = document.getElementById('toggle-date'); dTog.checked = dOpt;
+        const tTog = document.getElementById('toggle-time'); tTog.checked = tOpt;
+        const bTog = document.getElementById('toggle-battery'); bTog.checked = bOpt;
+        
+        const updateVisibility = () => {
+            document.getElementById('date-status').classList.toggle('status-hidden', !dTog.checked);
+            document.getElementById('time-status').classList.toggle('status-hidden', !tTog.checked);
+            document.getElementById('battery-status').classList.toggle('status-hidden', !bTog.checked);
+        };
+        updateVisibility();
+
+        dTog.onchange = () => { localStorage.setItem('busya_show_date', dTog.checked); updateVisibility(); };
+        tTog.onchange = () => { localStorage.setItem('busya_show_time', tTog.checked); updateVisibility(); };
+        bTog.onchange = () => { localStorage.setItem('busya_show_battery', bTog.checked); updateVisibility(); };
+    }
+
+    function initClock() {
+        const pad = (n) => n.toString().padStart(2, '0');
+        setInterval(() => {
+            const d = new Date();
+            document.getElementById('time-status').textContent = `${pad(d.getHours())}:${pad(d.getMinutes())}:${pad(d.getSeconds())}`;
+            document.getElementById('date-status').textContent = `${pad(d.getDate())}.${pad(d.getMonth()+1)}.${d.getFullYear()}`;
+        }, 1000);
+    }
+
+    function initBattery() {
+        if ('getBattery' in navigator) {
+            navigator.getBattery().then(bat => {
+                const update = () => { 
+                    document.getElementById('battery-text').textContent = `${Math.round(bat.level * 100)}%`; 
+                    document.querySelector('#battery-icon use').setAttribute('href', bat.charging ? '#ic-battery-charging' : '#ic-battery-full');
+                };
+                update(); bat.addEventListener('levelchange', update); bat.addEventListener('chargingchange', update);
+            });
+        } else {
+            document.getElementById('battery-status').style.display = 'none';
+        }
+    }
+
+    function setupEventListeners() {
+        document.getElementById('menu-btn').onclick = () => { document.getElementById('settings-drawer').classList.add('active'); document.getElementById('drawer-overlay').classList.add('active'); };
+        document.getElementById('drawer-overlay').onclick = () => { document.getElementById('settings-drawer').classList.remove('active'); document.getElementById('drawer-overlay').classList.remove('active'); };
+        document.getElementById('lang-select').onchange = (e) => applyLanguage(e.target.value);
+        document.getElementById('theme-select').onchange = (e) => applyTheme(e.target.value);
+        document.getElementById('custom-bg').oninput = (e) => { customBg = e.target.value; localStorage.setItem('busya_custom_bg', customBg); if(currentTheme === 'custom') applyTheme('custom'); };
+        document.getElementById('custom-primary').oninput = (e) => { customPrimary = e.target.value; localStorage.setItem('busya_custom_primary', customPrimary); if(currentTheme === 'custom') applyTheme('custom'); };
+
+        let clickCount = 0; let clickTimer;
+        document.getElementById('version').onclick = () => {
+            clickCount++; clearTimeout(clickTimer); clickTimer = setTimeout(() => clickCount = 0, 1000);
+            if (clickCount >= 7) {
+                const egg = document.getElementById('easter-egg'); egg.classList.add('active');
+                setTimeout(() => egg.classList.remove('active'), 5000); clickCount = 0;
+            }
+        };
+
+        document.getElementById('share-app-btn').onclick = async () => {
+            const txt = translations[currentLang].shareAppText;
+            const shareData = { title: 'Busya PPT/PPTX Reader', text: txt, url: 'https://github.com/berestnevnikolaj671-kot/Busya-PPT-and-PPTX-view-read/tree/main' };
+            if (navigator.share) { try { await navigator.share(shareData); } catch(err){} }
+            else { navigator.clipboard.writeText(shareData.url); showMessage("Успешно", "Ссылка скопирована!"); }
+        };
+
+        document.getElementById('trigger-file-btn').onclick = () => document.getElementById('file-input').click();
+        
+        document.getElementById('file-input').onchange = async (e) => {
+            const file = e.target.files[0]; if (!file) return;
+            
+            toggleEditor(false); clearEditorState();
+            
+            document.getElementById('main-screen').classList.add('hidden');
+            document.getElementById('viewer-screen').classList.remove('hidden');
+            document.getElementById('ppt-title').textContent = file.name;
+            document.getElementById('loader').classList.add('active');
+
+            try { await processFile(file); } 
+            catch (err) { showMessage("Ошибка", translations[currentLang].parsingError + " " + err.message); document.getElementById('presentation-content').innerHTML = `<div class="slide" style="padding:40px;"><h3 style="color:red;">${translations[currentLang].parsingError}</h3><p>${err.message}</p></div>`; } 
+            finally { document.getElementById('loader').classList.remove('active'); }
+        };
+
+        document.getElementById('back-btn').onclick = () => {
+            document.getElementById('viewer-screen').classList.add('hidden');
+            document.getElementById('main-screen').classList.remove('hidden');
+            document.getElementById('file-input').value = '';
+            toggleEditor(false); clearEditorState();
+        };
+
+        document.getElementById('btn-enable-edit').onclick = () => toggleEditor(true);
+        document.getElementById('btn-save-edit').onclick = () => toggleEditor(false);
+
+        document.getElementById('btn-export-menu').onclick = (e) => { e.stopPropagation(); document.getElementById('export-dropdown').classList.toggle('active'); };
+        document.addEventListener('click', (e) => { if(!e.target.closest('#btn-export-menu')) { const drop = document.getElementById('export-dropdown'); if(drop) drop.classList.remove('active'); } });
+
+        setupEditorTools(); setupExports();
+    }
+
+    function clearEditorState() {
+        undoStack = []; redoStack = [];
+        document.getElementById('objects-layer').innerHTML = '';
+        document.getElementById('presentation-content').innerHTML = '';
+        if (canvasCtx) canvasCtx.clearRect(0, 0, canvasCtx.canvas.width, canvasCtx.canvas.height);
+    }
+
+    function toggleEditor(show) {
+        const vTool = document.getElementById('view-toolbar');
+        const eTool = document.getElementById('editor-toolbar');
+        const layer = document.getElementById('edit-layer');
+        if (show) {
+            vTool.classList.add('hidden'); eTool.classList.add('active'); layer.classList.add('active');
+            resizeCanvas(); if(undoStack.length === 0) saveState();
+        } else {
+            vTool.classList.remove('hidden'); eTool.classList.remove('active'); layer.classList.remove('active');
+            document.getElementById('tool-settings').classList.remove('active');
+            document.querySelectorAll('.tool-btn').forEach(b => b.classList.remove('active')); activeTool = null; 
+            document.getElementById('drawing-canvas').style.cursor = 'crosshair';
+        }
+    }
+
+    async function processFile(file) {
+        const workspace = document.getElementById('presentation-content');
+        workspace.innerHTML = '';
+        
+        const arrayBuffer = await file.arrayBuffer();
+        const view = new Uint8Array(arrayBuffer);
+        
+        const isZip = view.length > 2 && view[0] === 0x50 && view[1] === 0x4B; 
+        
+        if (isZip) {
+            document.getElementById('export-pptx').style.display = 'none';
+            document.getElementById('export-ppt').style.display = 'block';
+
+            const zip = await window.JSZip.loadAsync(arrayBuffer);
+            let slideWidth = 960, slideHeight = 540;
+            
+            try {
+                if (zip.file('ppt/presentation.xml')) {
+                    const presXml = await zip.file('ppt/presentation.xml').async('text');
+                    const sldSzMatch = presXml.match(/<p:sldSz\s+cx="(\d+)"\s+cy="(\d+)"/);
+                    if (sldSzMatch) { slideWidth = parseInt(sldSzMatch[1]) / 9525; slideHeight = parseInt(sldSzMatch[2]) / 9525; }
+                }
+            } catch(e) {}
+            
+            const slidesInfo = Object.keys(zip.files).filter(f => /^ppt\/slides\/slide\d+\.xml$/.test(f));
+            if (slidesInfo.length === 0) throw new Error("Слайды не найдены");
+            
+            slidesInfo.sort((a,b) => {
+                let m1 = a.match(/slide(\d+)\.xml/); let m2 = b.match(/slide(\d+)\.xml/);
+                return (m1 ? parseInt(m1[1]) : 0) - (m2 ? parseInt(m2[1]) : 0);
+            });
+
+            const parser = new DOMParser();
+
+            for (let i = 0; i < slidesInfo.length; i++) {
+                try {
+                    const fname = slidesInfo[i];
+                    const content = await zip.file(fname).async('text');
+                    const doc = parser.parseFromString(content, "text/xml");
+                    
+                    const slideNameExt = fname.split('/').pop();
+                    const relsName = `ppt/slides/_rels/${slideNameExt}.rels`;
+                    let relsDoc = null;
+                    if (zip.file(relsName)) {
+                        const relsContent = await zip.file(relsName).async('text');
+                        relsDoc = parser.parseFromString(relsContent, "text/xml");
+                    }
+                    
+                    let slideHtml = `<div class="slide" id="slide-${i}" style="position:relative; width:${slideWidth}px; height:${slideHeight}px; background-color:white; overflow:hidden;">`;
+                    
+                    const pics = doc.getElementsByTagName("p:pic");
+                    for (let pic of Array.from(pics)) {
+                        const off = pic.getElementsByTagName("a:off")[0];
+                        const ext = pic.getElementsByTagName("a:ext")[0];
+                        const blip = pic.getElementsByTagName("a:blip")[0];
+                        
+                        if (off && ext && blip && relsDoc) {
+                            const x = parseInt(off.getAttribute("x")||0) / 9525;
+                            const y = parseInt(off.getAttribute("y")||0) / 9525;
+                            const w = parseInt(ext.getAttribute("cx")||0) / 9525;
+                            const h = parseInt(ext.getAttribute("cy")||0) / 9525;
+                            const embedId = blip.getAttribute("r:embed");
+                            
+                            const relNodes = relsDoc.getElementsByTagName("Relationship");
+                            for (let r of Array.from(relNodes)) {
+                                if (r.getAttribute("Id") === embedId) {
+                                    let target = r.getAttribute("Target").replace("../", "ppt/");
+                                    if (zip.file(target)) {
+                                        const blob = await zip.file(target).async("blob");
+                                        slideHtml += `<img src="${URL.createObjectURL(blob)}" style="position:absolute; left:${x}px; top:${y}px; width:${w}px; height:${h}px; object-fit:contain;">`;
+                                    }
+                                }
+                            }
+                        }
+                    }
+
+                    const shapes = doc.getElementsByTagName("p:sp");
+                    for (let sp of Array.from(shapes)) {
+                        const off = sp.getElementsByTagName("a:off")[0];
+                        const ext = sp.getElementsByTagName("a:ext")[0];
+                        if (off && ext) {
+                            const x = parseInt(off.getAttribute("x")||0) / 9525;
+                            const y = parseInt(off.getAttribute("y")||0) / 9525;
+                            const w = parseInt(ext.getAttribute("cx")||0) / 9525;
+                            const h = parseInt(ext.getAttribute("cy")||0) / 9525;
+                            let texts = Array.from(sp.getElementsByTagName("a:t")).map(t => t.textContent).join(" ");
+                            if (texts.trim()) slideHtml += `<div style="position:absolute; left:${x}px; top:${y}px; width:${w}px; height:${h}px; display:flex; align-items:flex-start; font-family:sans-serif; color:black; font-size:18px; word-wrap:break-word; overflow:hidden;">${texts}</div>`;
+                        }
+                    }
+                    
+                    slideHtml += `</div>`;
+                    workspace.innerHTML += slideHtml;
+                } catch(slErr) { console.warn("Skip slide error", slErr); }
+            }
+
+            const cW = document.getElementById('workspace-container').offsetWidth;
+            window.currentScale = (slideWidth > cW - 48) ? (cW - 48) / slideWidth : 1;
+            document.getElementById('workspace').style.transform = `scale(${window.currentScale})`;
+            
+        } else {
+            document.getElementById('export-pptx').style.display = 'block';
+            document.getElementById('export-ppt').style.display = 'none';
+
+            window.currentScale = 1; document.getElementById('workspace').style.transform = 'scale(1)';
+            
+            let textChunks = []; let currentStr = "";
+            for(let i=0; i<view.length; i++) {
+                const c = view[i];
+                if ((c >= 32 && c <= 126) || (c >= 192 && c <= 255)) { currentStr += String.fromCharCode(c); } 
+                else { if (currentStr.length > 5 && !currentStr.includes("Root Entry")) textChunks.push(currentStr.trim()); currentStr = ""; }
+            }
+            if (currentStr.length > 5) textChunks.push(currentStr.trim());
+            
+            workspace.innerHTML = `
+            <div class="slide" style="min-height:600px; padding: 40px; width: 100%;">
+                <h2 style="color:var(--md-sys-color-primary); margin-bottom:16px; font-size:24px;">PPT Бинарные данные (Текст)</h2>
+                <p style="opacity:0.7; font-size:14px; margin-bottom:20px; border-left: 4px solid #ffb300; padding-left:12px;">${translations[currentLang].binaryLimited}</p>
+                <div style="font-family:monospace; font-size:14px; white-space:pre-wrap; word-break:break-all; line-height:1.6; color:#333;">${textChunks.filter(c => /^[A-Za-zА-Яа-я0-9\s.,!?]+$/.test(c)).join('\n\n').substring(0, 15000)}</div>
+            </div>`;
+        }
+        setTimeout(() => { resizeCanvas(); toggleEditor(false); }, 500); 
+    }
+
+    function setupEditorTools() {
+        const subToolbar = document.getElementById('tool-settings');
+        const layer = document.getElementById('edit-layer');
+        const c = document.getElementById('drawing-canvas');
+        canvasCtx = c.getContext('2d', {willReadFrequently: true});
+
+        document.querySelectorAll('.tool-btn').forEach(btn => {
+            btn.onclick = () => {
+                const tool = btn.getAttribute('data-tool');
+                if (activeTool === tool) {
+                    activeTool = null; btn.classList.remove('active'); subToolbar.classList.remove('active');
+                    c.style.cursor = 'crosshair';
+                } else {
+                    document.querySelectorAll('.tool-btn').forEach(b => b.classList.remove('active'));
+                    activeTool = tool; btn.classList.add('active'); subToolbar.classList.add('active');
+                    
+                    const isBrush = tool === 'draw' || tool === 'eraser';
+                    document.getElementById('tool-size').style.display = isBrush ? 'block' : 'none';
+                    document.getElementById('brush-lbl').style.display = isBrush ? 'block' : 'none';
+                    document.getElementById('tool-color').style.display = tool === 'eraser' ? 'none' : 'block';
+                    document.getElementById('color-lbl').style.display = tool === 'eraser' ? 'none' : 'block';
+                    
+                    if (tool === 'eraser') c.style.cursor = 'cell';
+                    else if (tool === 'text') c.style.cursor = 'text';
+                    else c.style.cursor = 'crosshair';
+                }
+            };
+        });
+
+        function getPos(e) {
+            const rect = c.getBoundingClientRect();
+            const scale = window.currentScale || 1;
+            const clientX = e.touches ? e.touches[0].clientX : e.clientX;
+            const clientY = e.touches ? e.touches[0].clientY : e.clientY;
+            return { x: (clientX - rect.left) / scale, y: (clientY - rect.top) / scale };
+        }
+
+        layer.addEventListener('click', (e) => {
+            if (activeTool === 'text' && (e.target.id === 'drawing-canvas' || e.target.id === 'edit-layer')) {
+                const p = getPos(e); addTextNode(p.x, p.y);
+            }
+            if (activeTool === 'eraser' && (e.target.classList.contains('draggable-text') || e.target.classList.contains('draggable-img'))) {
+                e.target.remove(); saveState();
+            }
+        });
+
+        let lastX=0, lastY=0;
+        
+        c.addEventListener('mousedown', startDraw); c.addEventListener('touchstart', startDraw, {passive: false});
+        window.addEventListener('mousemove', drawMove); window.addEventListener('touchmove', drawMove, {passive: false});
+        window.addEventListener('mouseup', endDraw); window.addEventListener('touchend', endDraw);
+
+        function startDraw(e) {
+            if(activeTool!=='draw' && activeTool!=='eraser') return;
+            isDrawing = true; const p = getPos(e); lastX = p.x; lastY = p.y;
+        }
+
+        function drawMove(e) {
+            if(!isDrawing || (activeTool!=='draw' && activeTool!=='eraser')) return;
+            e.preventDefault(); const p = getPos(e);
+            
+            canvasCtx.beginPath(); 
+            canvasCtx.moveTo(lastX, lastY); 
+            canvasCtx.lineTo(p.x, p.y);
+            
+            if (activeTool === 'eraser') {
+                canvasCtx.globalCompositeOperation = "destination-out";
+                canvasCtx.lineWidth = document.getElementById('tool-size').value * 2;
+            } else {
+                canvasCtx.globalCompositeOperation = "source-over";
+                canvasCtx.strokeStyle = document.getElementById('tool-color').value;
+                canvasCtx.lineWidth = document.getElementById('tool-size').value;
+            }
+            
+            canvasCtx.lineCap = 'round'; 
+            canvasCtx.lineJoin = 'round'; 
+            canvasCtx.stroke();
+            lastX = p.x; lastY = p.y;
+        }
+
+        function endDraw() { if(isDrawing) { isDrawing = false; saveState(); } }
+
+        document.getElementById('btn-sign').onclick = () => { document.getElementById('signature-modal').classList.add('active'); setTimeout(resizeSig, 100); };
+        document.getElementById('btn-sig-clear').onclick = () => { if(sigCtx) sigCtx.clearRect(0,0, sigCtx.canvas.width, sigCtx.canvas.height); };
+        document.getElementById('btn-sig-save').onclick = () => {
+            if(sigCtx) addImageNode(document.getElementById('signature-canvas').toDataURL('image/png'), window.innerWidth/(2 * (window.currentScale||1)), 100);
+            document.getElementById('signature-modal').classList.remove('active');
+            activeTool = null; document.querySelectorAll('.tool-btn').forEach(b => b.classList.remove('active'));
+            document.getElementById('tool-settings').classList.remove('active');
+        };
+
+        document.getElementById('btn-undo').onclick = () => { if(undoStack.length>1) { redoStack.push(undoStack.pop()); restoreState(undoStack[undoStack.length-1]); } };
+        document.getElementById('btn-redo').onclick = () => { if(redoStack.length>0) { const s = redoStack.pop(); undoStack.push(s); restoreState(s); } };
+    }
+
+    function resizeCanvas() {
+        const content = document.getElementById('presentation-content');
+        const c = document.getElementById('drawing-canvas');
+        const layer = document.getElementById('edit-layer');
+        const w = content.offsetWidth || 960; const h = content.offsetHeight || 540;
+        
+        const oldState = c.toDataURL(); 
+        c.width = w; c.height = h; layer.style.width = w + 'px'; layer.style.height = h + 'px';
+        canvasCtx = c.getContext('2d', {willReadFrequently: true});
+        
+        if (oldState && oldState.length > 10) {
+            const img = new Image(); img.onload = () => { canvasCtx.clearRect(0,0,w,h); canvasCtx.drawImage(img,0,0); }; img.src = oldState;
+        }
+    }
+
+    window.addEventListener('resize', () => {
+        clearTimeout(window.resizeTimer);
+        window.resizeTimer = setTimeout(() => {
+            if (!document.getElementById('viewer-screen').classList.contains('hidden')) {
+                const cW = document.getElementById('workspace-container').offsetWidth;
+                const sW = document.querySelector('.slide') ? document.querySelector('.slide').offsetWidth : 960;
+                window.currentScale = (sW > cW - 48) ? (cW - 48) / sW : 1;
+                document.getElementById('workspace').style.transform = `scale(${window.currentScale})`;
+            }
+        }, 150);
+    });
+
+    function addTextNode(x, y) {
+        const div = document.createElement('div'); div.className = 'draggable-text'; div.contentEditable = 'true'; 
+        div.style.left = `${x}px`; div.style.top = `${y}px`; div.style.color = document.getElementById('tool-color').value; 
+        div.innerText = 'Текст';
+        document.getElementById('objects-layer').appendChild(div);
+        makeDraggable(div); div.focus(); try { document.execCommand('selectAll', false, null); } catch(e){}
+        div.onblur = () => { if(div.innerText.trim()==='') div.remove(); saveState(); };
+    }
+    
+    function addImageNode(src, x, y) {
+        const img = document.createElement('img'); img.className = 'draggable-img'; img.src = src; img.style.left = `${x}px`; img.style.top = `${y}px`;
+        document.getElementById('objects-layer').appendChild(img); makeDraggable(img); saveState();
+    }
+
+    function makeDraggable(el) {
+        let dragging = false, stX, stY, inX, inY;
+        const down = (e) => { 
+            if (activeTool === 'eraser') return; // Do not drag if trying to erase
+            if (el.contentEditable === "true" && e.target === el) return; 
+            dragging = true; stX = e.touches?e.touches[0].clientX:e.clientX; stY = e.touches?e.touches[0].clientY:e.clientY; inX = el.offsetLeft; inY = el.offsetTop; 
+        };
+        const move = (e) => { if(!dragging) return; e.preventDefault(); const scale = window.currentScale || 1; el.style.left=`${inX + ((e.touches?e.touches[0].clientX:e.clientX) - stX)/scale}px`; el.style.top=`${inY + ((e.touches?e.touches[0].clientY:e.clientY) - stY)/scale}px`; };
+        const up = () => { if(dragging){ dragging = false; saveState(); } };
+        el.onmousedown = down; window.addEventListener('mousemove', move); window.addEventListener('mouseup', up);
+        el.addEventListener('touchstart', down, {passive:false}); window.addEventListener('touchmove', move, {passive:false}); window.addEventListener('touchend', up);
+    }
+
+    function saveState() {
+        const c = document.getElementById('drawing-canvas');
+        undoStack.push({ cData: c.toDataURL(), html: document.getElementById('objects-layer').innerHTML });
+        redoStack = []; if(undoStack.length>20) undoStack.shift();
+    }
+    
+    function restoreState(s) {
+        if(!s) return;
+        const img = new Image();
+        img.onload = () => { canvasCtx.clearRect(0,0, canvasCtx.canvas.width, canvasCtx.canvas.height); canvasCtx.drawImage(img,0,0); };
+        img.src = s.cData;
+        const obj = document.getElementById('objects-layer'); obj.innerHTML = s.html; Array.from(obj.children).forEach(makeDraggable);
+    }
+
+    function initCanvas() {
+        const c = document.getElementById('signature-canvas'); sigCtx = c.getContext('2d'); let d=false, lx=0, ly=0;
+        const pos = (e) => { const r = c.getBoundingClientRect(); return {x:(e.touches?e.touches[0].clientX:e.clientX)-r.left, y:(e.touches?e.touches[0].clientY:e.clientY)-r.top};};
+        c.onmousedown=c.ontouchstart=(e)=>{d=true; const p=pos(e); lx=p.x; ly=p.y;};
+        c.onmousemove=c.ontouchmove=(e)=>{if(!d)return; e.preventDefault(); const p=pos(e); sigCtx.beginPath(); sigCtx.moveTo(lx,ly); sigCtx.lineTo(p.x,p.y); sigCtx.lineWidth=3; sigCtx.stroke(); lx=p.x; ly=p.y;};
+        window.addEventListener('mouseup', ()=>d=false); window.addEventListener('touchend', ()=>d=false);
+    }
+    function resizeSig() { const c = document.getElementById('signature-canvas'); const p = document.getElementById('signature-pad-container'); c.width=p.offsetWidth; c.height=p.offsetHeight; sigCtx=c.getContext('2d'); }
+
+    async function generateEditedPptxFile() {
+        const workspaceNode = document.getElementById('workspace');
+        const currentTransform = workspaceNode.style.transform;
+        workspaceNode.style.transform = 'none';
+        
+        const fullCanvas = await window.html2canvas(workspaceNode, { scale: 1.5, useCORS: true, backgroundColor: '#ffffff' });
+        workspaceNode.style.transform = currentTransform;
+        
+        const pres = new window.pptxgen();
+        const slides = document.querySelectorAll('.slide');
+        
+        if (slides.length === 0) return await pres.write({ outputType: 'blob' });
+
+        const sW = slides[0].offsetWidth * 1.5; const sH = slides[0].offsetHeight * 1.5;
+        pres.defineLayout({ name:'Custom', width: sW/96, height: sH/96 }); pres.layout = 'Custom';
+
+        for (let i = 0; i < slides.length; i++) {
+            const slideCanvas = document.createElement('canvas'); slideCanvas.width = sW; slideCanvas.height = sH;
+            slideCanvas.getContext('2d').drawImage(fullCanvas, 0, slides[i].offsetTop * 1.5, sW, sH, 0, 0, sW, sH);
+            pres.addSlide().addImage({ data: slideCanvas.toDataURL('image/jpeg', 0.9), x: 0, y: 0, w: '100%', h: '100%' });
+        }
+        return await pres.write({ outputType: 'blob' });
+    }
+
+    function setupExports() {
+        const getCanvas = async () => {
+            const ws = document.getElementById('workspace'); const tf = ws.style.transform; ws.style.transform = 'none';
+            const c = await window.html2canvas(ws, { scale: 2, useCORS: true, backgroundColor: '#ffffff' }); ws.style.transform = tf; return c;
+        };
+        const dl = (u, n) => { const a=document.createElement('a'); a.href=u; a.download=n; a.click(); };
+        
+        document.getElementById('export-png').onclick = async () => { document.getElementById('export-dropdown').classList.remove('active'); dl((await getCanvas()).toDataURL('image/png'), 'export.png'); };
+        document.getElementById('export-jpeg').onclick = async () => { document.getElementById('export-dropdown').classList.remove('active'); dl((await getCanvas()).toDataURL('image/jpeg', 0.9), 'export.jpg'); };
+        document.getElementById('export-webp').onclick = async () => { document.getElementById('export-dropdown').classList.remove('active'); dl((await getCanvas()).toDataURL('image/webp', 0.9), 'export.webp'); };
+        document.getElementById('export-pdf').onclick = async () => {
+            document.getElementById('export-dropdown').classList.remove('active');
+            const c = await getCanvas(); const pdf = new window.jspdf.jsPDF(c.width>c.height?'l':'p', 'px', [c.width, c.height]);
+            pdf.addImage(c.toDataURL('image/jpeg', 0.95), 'JPEG', 0, 0, c.width, c.height); pdf.save('export.pdf');
+        };
+        
+        const saveAsPptx = async () => {
+            document.getElementById('export-dropdown').classList.remove('active'); document.getElementById('loader').classList.add('active');
+            try {
+                const blob = await generateEditedPptxFile();
+                const origName = (document.getElementById('file-input').files[0]) ? document.getElementById('file-input').files[0].name.split('.')[0] : 'Document';
+                dl(URL.createObjectURL(blob), `${origName}_edited.pptx`);
+            } catch(e) { showMessage("Ошибка", "Ошибка сохранения: " + e.message); }
+            document.getElementById('loader').classList.remove('active');
+        };
+        
+        document.getElementById('export-pptx').onclick = saveAsPptx; document.getElementById('export-ppt').onclick = saveAsPptx;
+        document.getElementById('btn-print').onclick = () => window.print();
+        
+        document.getElementById('btn-share-file').onclick = async () => {
+            document.getElementById('loader').classList.add('active');
+            try {
+                const blob = await generateEditedPptxFile();
+                const origName = (document.getElementById('file-input').files[0]) ? document.getElementById('file-input').files[0].name.split('.')[0] : 'Document';
+                const file = new File([blob], `${origName}_edited.pptx`, { type: "application/vnd.openxmlformats-officedocument.presentationml.presentation" });
+                
+                if (navigator.canShare && navigator.canShare({files:[file]})) await navigator.share({files:[file], title: origName});
+                else { showMessage("Внимание", "Прямая отправка файлов не поддерживается на вашем устройстве. Файл будет сохранён локально."); dl(URL.createObjectURL(blob), `${origName}_edited.pptx`); }
+            } catch(e) { showMessage("Ошибка", "Ошибка создания файла для отправки."); }
+            document.getElementById('loader').classList.remove('active');
+        };
+    }
+</script>
+</body>
+</html>
